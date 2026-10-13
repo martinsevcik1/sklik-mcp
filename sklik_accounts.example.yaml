@@ -1,0 +1,18 @@
+# Seznam účtů, se kterými smí Sklik MCP pracovat. Cokoli mimo seznam odmítne - i čtení.
+# Úpravy platí okamžitě, restart není potřeba. Nejjednodušší je nechat ho vyplnit přes sklik_setup.py.
+#
+# user_id = ID účtu ve Skliku (vypíše ho sklik_setup.py --list). Účet bez user_id je zablokovaný.
+# folder  = složka klienta (relativně ke clients_root). Sem MCP ukládá reporty a náhledy.
+# clients_root = kořen složek klientů. Relativní cesta se počítá od složky s tímto souborem,
+#   takže když soubor leží na cloudovém disku, sdílí ho i se složkami klientů všechny počítače.
+
+# dpa = máš s Anthropicem smlouvu o zpracování osobních údajů (DPA)? Platí pro plány Claude Team,
+#   Enterprise a API. U Free, Pro a Max nech false: MCP pak do konverzace nepouští osobní údaje
+#   (seznamy zákazníků, kontaktní údaje, vyhledávací dotazy s e-mailem nebo telefonem).
+dpa: false
+
+clients_root: klienti
+
+accounts:
+  vzorovy-eshop.cz: {user_id: 1234567, folder: vzorovy_eshop}
+  vzorova-firma.cz: {user_id: 2345678, folder: vzorova_firma}

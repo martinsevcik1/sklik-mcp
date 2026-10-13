@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+logs/
+state/
+klienti/
+nahledy_zmen/
+sklik_accounts.yaml
+sklik.yaml
+*.backup-*.json
+.DS_Store
+fenix.txt
