@@ -24,8 +24,8 @@ Most of the work can be done from the conversation without the Sklik web interfa
 > that matter, read through the code (or have someone who understands it do that), start with one account and
 > read every change before you approve it. Use it at your own risk.
 
-The documentation and the tool descriptions are in Czech, as is Sklik itself. The step-by-step guide is
-[docs/NAVOD.md](docs/NAVOD.md).
+The tool descriptions are in Czech, as is Sklik itself. The step-by-step guide is
+[docs/GUIDE.md](docs/GUIDE.md) ([Czech version](docs/NAVOD.md)).
 
 ## What you need
 
@@ -154,22 +154,47 @@ refreshes itself once a week into `~/.sklik/`.
 
 ## Where your data goes
 
-- **The server itself** runs on your computer and only talks to the Sklik API. There's no other server in
-  between.
-- **Tool results go into your conversation with Claude**, i.e. to Anthropic: campaign names, report numbers,
-  search terms, ad copy and anything else Claude reads. They're handled like anything else you type into the
-  conversation, under the terms of your Claude plan and your privacy settings (including whether conversations
-  may be used for model training).
-- **Credentials** (the keys in `~/.sklik`) stay on your computer. The server reads them locally and never
-  returns them to the conversation.
-- You're working with client data. If your contracts with clients or your agency cover this, check that
-  processing through a third-party AI tool is fine.
+- **The server itself** runs on your computer and only talks to the Sklik API. There's no other server in between.
+- **Credentials** (the keys in `~/.sklik`) stay on your computer. The server reads them locally and never returns
+  them to the conversation.
+- **Tool results go into your conversation with Claude**, i.e. to Anthropic: campaign names, report numbers, search
+  terms, ad copy and anything else Claude reads. Anthropic processes them in the US or elsewhere in the world, with
+  help from subprocessors ([list](https://www.anthropic.com/subprocessors)). What it may do with them depends on
+  the terms of your Claude plan.
+
+### Before you use it on a client account
+
+1. **May the client's data go to Anthropic?** Campaign performance, budgets and revenue aren't personal data, but
+   an NDA or your client contract often protects them. Check that it lets you pass the data to an AI provider in
+   the US or elsewhere outside the EU, including its subprocessors (and check your agency contract too if you work
+   through one). If the contract doesn't cover this or forbids it, you need the client's consent.
+2. **Are you on a plan with commercial terms?** Claude Team (from two seats), Enterprise and the API include a data
+   processing agreement (DPA), and Anthropic doesn't train on your data. Free, Pro and Max are consumer plans
+   without a DPA, where only a toggle in your settings switches training off. Don't use them for client data.
+3. **Is personal data involved?** Keep the default `dpa: false` (see below). Only switch to `dpa: true` once you
+   have a DPA with both the client and the model provider.
+4. **Does the data have to stay in the EU?** Claude straight from Anthropic can't guarantee EU-only processing. Use
+   Claude Code with a model from Google Cloud (Agent Platform, region `eu`) or Amazon Bedrock (an EU inference
+   profile). Your DPA is then with Google or Amazon, and you pay for actual usage. Step-by-step Google Cloud setup
+   by MeasureDesign (in Czech): [Jak používat Claude Code pro práci s firemními a zákaznickými
+   daty](https://www.measuredesign.cz/blog/jak-pouzivat-claude-code-pro-praci-s-firemnimi-a-zakaznickymi-daty). Add
+   the MCP to Claude Code like this:
+
+   ```
+   claude mcp add --scope user sklik -- <folder>/.venv/bin/python <folder>/sklik_server.py
+   ```
+
+   On Windows, Python is in `<folder>\.venv\Scripts\python.exe`. If your account list lives outside the MCP folder,
+   add `--env SKLIK_ACCOUNTS_FILE=<path to sklik_accounts.yaml>` after `--scope user`.
+
+This isn't legal advice. Have your contracts checked by whoever drafts them.
 
 ### DPA mode
 
-Personal data should only go into the conversation if you have a data processing agreement (DPA) with Anthropic.
-It's part of the commercial terms for Claude Team, Enterprise and the API, but not for Free, Pro and Max.
-That's why `sklik_accounts.yaml` has a switch:
+Personal data should only go into the conversation if you have a data processing agreement (DPA) with both the
+client and the model provider. With Anthropic, it's part of the commercial terms for Claude Team, Enterprise and
+the API. With Claude through Google Cloud or Amazon Bedrock, you have it with them. Free, Pro and Max don't have
+one. That's why `sklik_accounts.yaml` has a switch:
 
 ```yaml
 dpa: false   # default
@@ -183,7 +208,8 @@ dpa: false   # default
   modes.
 
 The current mode is shown in the account list. Limitation: names and addresses people type into search can't be
-detected reliably, so the filter won't catch them. They're rare in search terms, but can't be ruled out.
+detected reliably, so the filter won't catch them. Unlike Google Ads, Sklik also shows rare search terms, so an
+email address or a phone number turns up now and then, roughly once per thousand search terms.
 
 ## Security
 

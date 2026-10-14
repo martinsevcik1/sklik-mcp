@@ -1,5 +1,7 @@
 # Návod: Sklik MCP od nuly
 
+English: [GUIDE.md](GUIDE.md)
+
 Počítej zhruba s 15 minutami.
 
 ---
@@ -106,7 +108,9 @@ Další účty přidáš kdykoli: znovu `install.py` (krok s klíčem a výběre
 `sklik_setup.py` (Windows: `.venv\Scripts\python.exe sklik_setup.py`, macOS: `.venv/bin/python sklik_setup.py`).
 Nový token pro Fénix (třeba po vypršení) zadáš přes `sklik_setup.py --fenix`.
 Seznam jde upravit i v textovém editoru, změny platí hned bez restartu. Je v něm i přepínač `dpa`
-(viz README.cs.md, část Režim s DPA a bez DPA). Bez plánu Claude Team, Enterprise nebo API nech `false`.
+(viz README.cs.md, část Režim s DPA a bez DPA). Nech `false`, pokud nemáš smlouvu o zpracování osobních
+údajů s klientem i s poskytovatelem modelu (Claude Team, Enterprise nebo API, případně Claude přes Google
+Cloud nebo Amazon Bedrock).
 
 ---
 
